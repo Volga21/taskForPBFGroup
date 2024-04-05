@@ -51,14 +51,13 @@ class Client{
             std::stringstream textStream;
 
             textStream<<std::put_time(timeinfo, "[%Y-%m-%d %H.%M.%S.");
-            std::string s=textStream.str()+std::to_string(ms.count())+"]\n";
 
-            return textStream.str()+std::to_string(ms.count())+"]\n";
+            return textStream.str()+std::to_string(ms.count())+"]";
         }
         void sendInfo(){
             std::string name{buffer};
             for(size_t i=0;i<seconds;i++){
-                std::string info=name+getTime();
+                std::string info=getTime() + name +"\n";
                 strcpy(buffer,info.c_str());
                 send(client_socket,buffer,4096,0);
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
