@@ -18,7 +18,6 @@
 #define SERVER_IP_ "127.0.0.1"
 
 class Client{
-    friend void startSend(int server){};
     public:
         Client(size_t seconds,char const name[4096],size_t port){
             client_socket = socket(AF_INET,SOCK_STREAM,0);

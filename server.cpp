@@ -21,7 +21,7 @@ class Server{
         Server(){
             server_socket = socket(AF_INET,SOCK_STREAM,0);
             if(server_socket == -1 ){
-                std::cout<<"Can't create socket\n";
+                throw "Can't create socket\n";
             }
             out.open("log.txt", std::ios::app | std::ios::out);
         }
@@ -34,22 +34,21 @@ class Server{
             size = sizeof(hint);
             int ret = bind(server_socket, (sockaddr *) &hint, sizeof(hint));
             if(ret == -1){
-                std::cerr<<"Can't bind to port\nPlease, check port\n";
-                return -1;
+                throw "Can't bind to port\nPlease, check port\n";
             }   
             return 0;
         }
         
         int startListen(){
             if(listen(server_socket,SOMAXCONN) == -1){
-                std::cerr<<"Can't listen";
+                throw "Can't listen";
                 return -1;
             }
             else{
                 while(true){
                     int client_socket = makeAccept(); 
                     if(client_socket == -1){
-                        std::cout<<"Can't accept client\n";
+                       throw "Can't accept client\n";
                     }
                     else{      
                         int * point=&client_socket; 
@@ -57,7 +56,6 @@ class Server{
                         f2.detach();
                     }
                 }
-                std::cout<<"Here2\n";
             }
             return 0;
         }
@@ -117,11 +115,12 @@ int main(){
     std::ofstream out;
     std::cout<<"Input port:";
     std::cin>>port;
-    if(tcp_server.makeBind(port)==-1){
-        return 1;
+    try{
+        tcp_server.makeBind(port);
+        tcp_server.startListen();
     }
-    if(tcp_server.startListen()==-1){
-        return 2;
+    catch(std::string & error_msg){
+        std::cout<<error_msg;
     }
     std::cout<<"Goodbye!\n";
     return 0;
