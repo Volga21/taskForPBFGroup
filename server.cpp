@@ -109,14 +109,10 @@ class Server{
 
 
 
-int main(){
+int main(int argc, char* argv[]){
     Server tcp_server{};
-    size_t port;
-    std::ofstream out;
-    std::cout<<"Input port:";
-    std::cin>>port;
     try{
-        tcp_server.makeBind(port);
+        tcp_server.makeBind((size_t)atoi(argv[1]));
         tcp_server.startListen();
     }
     catch(std::string & error_msg){
